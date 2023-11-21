@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+    database:
+        image: mysql:latest
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=ABC@def123
+            - MYSQL_DATABASE=books
+        ports:
+            - 3306:3306
+        healthcheck:
+            test:
+                [
+                    "CMD",
+                    "mysqladmin",
+                    "ping",
+                    "-h",
+                    "localhost",
+                    "-u",
+                    "root",
+                    "-pABC@def123",
+                ]
+            interval: 5s
+            timeout: 10s
+            retries: 5
+    server:
+        build:
+            context: .
+            dockerfile: ./backend/Dockerfile
+
+        command: sh -c "uvicorn main:app --reload --port=8000 --host=0.0.0.0"
+        ports:
+            - 8000:8000
+        volumes:
+            - ./backend:/app
+        depends_on:
+            - database
+    fronend:
+        build:
+            context: .
+            dockerfile: "./frontend/Dockerfile"
+        ports:
+            - 3000:3000
+        volumes:
+            - ./frontend:/app
