@@ -16,3 +16,4 @@ class BookCreate(BaseModel):
 
 class BookUpdate(BaseModel):
     new_status: str
+    new_title:str

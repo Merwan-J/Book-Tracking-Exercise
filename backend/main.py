@@ -17,7 +17,7 @@ app.add_middleware(
 
 
 def get_repository():
-    return BookRepository(host="database", user="root", password="ABC@def123", database="books")
+    return BookRepository(host="localhost", user="root", password="merwan", database="books")
 
 
 @app.get("/")
@@ -37,7 +37,7 @@ def add_book_entry(book_data: BookCreate, repository: BookRepository = Depends(g
 
 @app.put("/book-entries/{entry_id}", response_model=BookEntry)
 def update_book_entry_status(entry_id: int, book_data: BookUpdate, repository: BookRepository = Depends(get_repository)):
-    return repository.update_book_entry_status(entry_id, book_data.new_status)
+    return repository.update_book_entry_status(entry_id, book_data.new_status, book_data.new_title)
 
 
 @app.delete("/book-entries/{entry_id}", response_class=JSONResponse)

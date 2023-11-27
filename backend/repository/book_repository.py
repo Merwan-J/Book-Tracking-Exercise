@@ -57,7 +57,8 @@ class BookRepository:
             entry_id = cursor.lastrowid
             return BookEntry(id=entry_id, title=title, status=status)
 
-    def update_book_entry_status(self, entry_id: int, new_status: str) -> BookEntry:
+    def update_book_entry_status(self, entry_id: int, new_status: str,new_title:str) -> BookEntry:
+        print("update_book_entry_status",entry_id,new_status,new_title)
         with mysql.connector.connect(**self.connection_params) as connection:
             cursor = connection.cursor(dictionary=True)
 
@@ -68,9 +69,9 @@ class BookRepository:
             entry_id = book_entry['id']
 
             cursor.execute(
-                "UPDATE book_entries SET status=%s WHERE id=%s", (new_status, entry_id))
+                "UPDATE book_entries SET title=%s, status=%s WHERE id=%s", (new_title,new_status, entry_id))
             connection.commit()
-            return BookEntry(id=entry_id, title=title, status=new_status)
+            return BookEntry(id=entry_id, title=new_title, status=new_status)
 
     def delete_book_entry(self, entry_id: int):
         with mysql.connector.connect(**self.connection_params) as connection:

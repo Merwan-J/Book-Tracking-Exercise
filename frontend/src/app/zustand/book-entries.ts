@@ -9,6 +9,8 @@ type BooksState = {
         id: number,
         new_status: "completed" | "to-read" | "reading"
     ) => void;
+    updateBookTitle: (id: number, new_title: string) => void;
+
     removeBook: (id: number) => void;
 };
 
@@ -21,6 +23,15 @@ const useBooksStore = create<BooksState>((set) => ({
             const book = state.books.find((book) => book.id === id);
             if (book) {
                 book.status = newStatus;
+            }
+            return { books: [...state.books] };
+        });
+    },
+    updateBookTitle: (id: number, new_title) => {
+        set((state) => {
+            const book = state.books.find((book) => book.id === id);
+            if (book) {
+                book.title = new_title;
             }
             return { books: [...state.books] };
         });
